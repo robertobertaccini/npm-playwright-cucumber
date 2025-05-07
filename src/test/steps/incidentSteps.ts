@@ -47,9 +47,7 @@ Given('I am on the home page', async function () {
  });
 
  When('I complete the contact information form:', async function (dataTable) {
-    const dataFromTable = dataTable.raw();
-    console.log("line 0 value : "+dataFromTable[0][1]);
-
+   const dataFromTable = dataTable.raw();
    await expect(fixture.page.getByTestId('First Name:input:control')).toBeVisible({ timeout: 10_000 });
 
    await fixture.page.getByTestId('First Name:input:control').fill(dataFromTable[0][1]);
