@@ -6,7 +6,7 @@ import { fixture } from "../../hooks/pageFixture";
 setDefaultTimeout(60 * 1000 * 2)
 
 Given('I am logged into the customer portal', async function () {
-    await fixture.page.goto(process.env.TARGETURL);
+    await fixture.page.goto(process.env.BASEURL);
 
     await expect(fixture.page.getByPlaceholder('User name')).toBeVisible();
     await fixture.page.getByPlaceholder('User name').fill('CustomerREF@SL');
@@ -37,15 +37,31 @@ Given('I am on the home page', async function () {
  });
 
  When('I fill in the service details:', async function (dataTable) {
+   const dataFromTable = dataTable.raw();
+
    await expect(fixture.page.getByTestId('Communication channel used:select:control')).toBeVisible({ timeout: 10_000 });
-   await fixture.page.getByTestId('Communication channel used:select:control').selectOption('E-mail');
+   // await fixture.page.getByTestId('What happened?:text-area:control').selectOption(dataFromTable[0][1]);
+   //await fixture.page.getByTestId('Where did this happen?:text-area:control').selectOption(dataFromTable[1][1]);
+   await fixture.page.getByTestId('Communication channel used:select:control').selectOption(dataFromTable[3][1]);
    await fixture.page.getByRole('button', { name: 'Next' }).click();
  });
 
  When('I complete the contact information form:', async function (dataTable) {
+    const dataFromTable = dataTable.raw();
+    console.log("line 0 value : "+dataFromTable[0][1]);
+
    await expect(fixture.page.getByTestId('First Name:input:control')).toBeVisible({ timeout: 10_000 });
-   await fixture.page.getByTestId('First Name:input:control').fill('Roberto');
+
+   await fixture.page.getByTestId('First Name:input:control').fill(dataFromTable[0][1]);
+   await fixture.page.getByTestId('Last Name:input:control').fill(dataFromTable[1][1]);
+   await fixture.page.getByTestId('E-Mail:input:control').fill(dataFromTable[2][1]);
+   await fixture.page.getByTestId('Phone Number:phone-input:control').fill(dataFromTable[3][1]);
+
    await fixture.page.locator('label').filter({ hasText: 'Manually' }).locator('div').click();
+   await fixture.page.getByTestId('Country:select:control').selectOption(dataFromTable[7][1]);
+   await fixture.page.getByTestId('City:input:control').fill(dataFromTable[4][1]);
+   //await fixture.page.getByTestId('State:input:control').fill(dataFromTable[7][1]);
+   await fixture.page.getByTestId('Street:input:control').fill(dataFromTable[5][1]);
    await fixture.page.getByRole('button', { name: 'Next' }).click();
  });
 

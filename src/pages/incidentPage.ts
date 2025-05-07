@@ -16,7 +16,7 @@ export default class IncidentPage {
     }
 
 
-    async enterUserName(user: string) {
+    async enterIncidentDetails(IncidentType: string, IncidentSubType: string) {
         await this.page.getByLabel(this.Elements.userInput).fill(user);
     }
     async enterPassword(Password: string) {
